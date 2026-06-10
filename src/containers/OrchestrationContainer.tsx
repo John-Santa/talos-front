@@ -1,28 +1,11 @@
 import { useViewMode } from '@/app/ViewMode'
-import { VIEW_MODES, type ViewMode } from '@/app/viewModes'
+import type { ViewMode } from '@/app/viewModes'
 import { useOrchestration } from '@/hooks/useTalosData'
 import { ErrorState, Loading } from '@/components/Feedback'
 import { OrchestrationConsole } from '@/views/OrchestrationConsole/OrchestrationConsole'
 import { OrchestrationFaithful } from '@/views/OrchestrationFaithful/OrchestrationFaithful'
+import { OrchestrationFlow } from '@/views/OrchestrationFlow/OrchestrationFlow'
 import type { OrchestrationSnapshot } from '@/domain/types'
-
-/** Placeholder for the views still being built (Fiel/Flow — PR6/PR7). */
-function ViewPlaceholder({ view }: { view: ViewMode }) {
-  const meta = VIEW_MODES.find((m) => m.id === view)
-  return (
-    <div style={{ flex: 1, display: 'grid', placeItems: 'center', padding: 24, minHeight: 0 }}>
-      <div className="panel panel-pad" style={{ textAlign: 'center', maxWidth: 440 }}>
-        <div className="eyebrow" style={{ marginBottom: 8 }}>
-          Orchestration
-        </div>
-        <h2 style={{ font: '600 20px/1.3 var(--sans)', margin: '0 0 8px' }}>{meta?.label}</h2>
-        <p className="faint" style={{ fontSize: 12 }}>
-          vista en construcción
-        </p>
-      </div>
-    </div>
-  )
-}
 
 function renderView(view: ViewMode, snapshot: OrchestrationSnapshot) {
   switch (view) {
@@ -30,8 +13,8 @@ function renderView(view: ViewMode, snapshot: OrchestrationSnapshot) {
       return <OrchestrationConsole snapshot={snapshot} />
     case 'faithful':
       return <OrchestrationFaithful snapshot={snapshot} />
-    default:
-      return <ViewPlaceholder view={view} />
+    case 'flow':
+      return <OrchestrationFlow snapshot={snapshot} />
   }
 }
 
