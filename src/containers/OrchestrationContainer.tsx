@@ -37,6 +37,12 @@ export function OrchestrationContainer() {
   const mutations = useTalosMutations()
   const [dialog, setDialog] = useState<Dialog>(null)
   const [busy, setBusy] = useState(false)
+  const [mutationError, setMutationError] = useState<string | null>(null)
+
+  const closeDialog = () => {
+    setDialog(null)
+    setMutationError(null)
+  }
 
   const actions: OrchestrationActions = {
     onNew: () => setDialog({ kind: 'new' }),
@@ -46,10 +52,15 @@ export function OrchestrationContainer() {
 
   const run = async (fn: () => Promise<void>) => {
     setBusy(true)
+    setMutationError(null)
     try {
       await fn()
       setDialog(null)
+      setMutationError(null)
       refetch()
+    } catch (e) {
+      setMutationError(e instanceof Error ? e.message : String(e))
+      // Dialog stays open for retry — do NOT close
     } finally {
       setBusy(false)
     }
@@ -75,8 +86,9 @@ export function OrchestrationContainer() {
         <NewWorktreeDialog
           idleAgents={data?.idleAgents}
           busy={busy}
+          errorMessage={mutationError ?? undefined}
           onCreate={(input) => run(() => mutations.createWorktree(input))}
-          onCancel={() => setDialog(null)}
+          onCancel={closeDialog}
         />
       ) : null}
 
@@ -85,8 +97,9 @@ export function OrchestrationContainer() {
           title={`¿Mergear ${dialog.worktree.jiraKey}?`}
           confirmLabel="Mergear"
           busy={busy}
+          errorMessage={mutationError ?? undefined}
           onConfirm={() => run(() => mutations.mergeWorktree(dialog.worktree.jiraKey))}
-          onCancel={() => setDialog(null)}
+          onCancel={closeDialog}
         >
           Vas a mergear <b style={{ color: 'var(--tx)' }}>{dialog.worktree.branch}</b> a{' '}
           <b style={{ color: 'var(--tx)' }}>develop</b>. Se chequean conflictos antes; si los hay, se
@@ -100,8 +113,9 @@ export function OrchestrationContainer() {
           confirmLabel="Teardown"
           danger
           busy={busy}
+          errorMessage={mutationError ?? undefined}
           onConfirm={() => run(() => mutations.teardownWorktree(dialog.worktree.agent))}
-          onCancel={() => setDialog(null)}
+          onCancel={closeDialog}
         >
           Vas a eliminar el worktree <b style={{ color: 'var(--tx)' }}>{dialog.worktree.branch}</b>.
         </ConfirmDialog>
