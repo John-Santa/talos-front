@@ -1,0 +1,16 @@
+/* Minimal global reset. The design system (`.tw`) owns the rest. */
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: #0a0b0d; /* --bg, so there is no flash before .tw mounts */
+}
+
+*:focus-visible {
+  outline: 2px solid var(--accent, #66d9d0);
+  outline-offset: 2px;
+}

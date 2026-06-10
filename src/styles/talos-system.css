@@ -1,0 +1,282 @@
+/* ─────────────────────────────────────────────────────────────
+   TALOS · Web — Design tokens & component atoms
+   Near-mono dark base + single teal accent + per-agent identity hue.
+   Type: IBM Plex Sans (UI/prose) · IBM Plex Mono (data/code).
+   Everything scoped under .tw so it never collides with design-canvas.
+   ───────────────────────────────────────────────────────────── */
+
+.tw {
+  /* surfaces — cool near-black, low saturation */
+  --bg:        #0a0b0d;
+  --bg-2:      #0e1013;
+  --surface:   #131519;
+  --surface-2: #181b20;
+  --raised:    #1d2027;
+  --line:      #262a31;
+  --line-soft: #1c2026;
+  --line-hard: #343941;
+
+  /* text */
+  --tx:        #e7e8ec;
+  --tx-dim:    #a0a4ad;
+  --tx-faint:  #6a6f79;
+  --tx-ghost:  #474c55;
+
+  /* single system accent — teal */
+  --accent:     oklch(0.80 0.085 190);
+  --accent-dim: oklch(0.62 0.07 190);
+  --accent-bg:  oklch(0.80 0.085 190 / 0.12);
+
+  /* semantic */
+  --ok:     oklch(0.80 0.11 155);
+  --ok-bg:  oklch(0.80 0.11 155 / 0.13);
+  --warn:   oklch(0.82 0.12 80);
+  --warn-bg:oklch(0.82 0.12 80 / 0.13);
+  --danger: oklch(0.70 0.16 25);
+  --danger-bg: oklch(0.70 0.16 25 / 0.13);
+
+  /* per-agent identity hues — constant L/C, hue only */
+  --ag-athena:     oklch(0.80 0.10 300);
+  --ag-atlas:      oklch(0.80 0.10 70);
+  --ag-hephaestus: oklch(0.80 0.10 38);
+  --ag-cronos:     oklch(0.80 0.10 110);
+  --ag-iris:       oklch(0.80 0.10 330);
+  --ag-gaia:       oklch(0.80 0.10 150);
+  --ag-themis:     oklch(0.80 0.10 255);
+  --ag-hermes:     oklch(0.80 0.10 195);
+  --ag-argos:      oklch(0.74 0.13 18);
+  --ag-zeus:       oklch(0.86 0.11 92);
+
+  --r: 10px;          /* card radius */
+  --r-sm: 7px;
+  --sans: "IBM Plex Sans", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, monospace;
+
+  font-family: var(--sans);
+  color: var(--tx);
+  background: var(--bg);
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+}
+.tw *, .tw *::before, .tw *::after { box-sizing: border-box; }
+.tw ::selection { background: var(--accent-bg); }
+
+/* ── primitives ───────────────────────────────────────────── */
+.mono { font-family: var(--mono); font-feature-settings: "ss01"; white-space: nowrap; }
+.dim  { color: var(--tx-dim); }
+.faint{ color: var(--tx-faint); }
+.tnum { font-variant-numeric: tabular-nums; }
+
+.eyebrow {
+  font-family: var(--sans);
+  font-size: 11px; font-weight: 600;
+  letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--tx-faint);
+}
+
+/* ── panels / cards ───────────────────────────────────────── */
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+}
+.panel-pad { padding: 22px 24px; }
+.panel-head {
+  display: flex; align-items: baseline; justify-content: space-between;
+  gap: 12px; margin-bottom: 16px;
+}
+.panel-title { font-size: 13.5px; font-weight: 600; letter-spacing: 0.01em; }
+
+/* ── agent monogram badge ─────────────────────────────────── */
+.ag {
+  --c: var(--accent);
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 26px; height: 26px; border-radius: 7px;
+  font-family: var(--mono); font-weight: 600; font-size: 12px;
+  color: var(--c);
+  background: color-mix(in oklch, var(--c) 14%, transparent);
+  border: 1px solid color-mix(in oklch, var(--c) 38%, transparent);
+  flex: 0 0 auto; text-transform: uppercase; line-height: 1;
+}
+.ag.lg { width: 40px; height: 40px; border-radius: 10px; font-size: 17px; }
+.ag.xl { width: 56px; height: 56px; border-radius: 13px; font-size: 23px; }
+.ag.sm { width: 20px; height: 20px; border-radius: 6px; font-size: 10px; }
+
+.ag-athena{--c:var(--ag-athena);} .ag-atlas{--c:var(--ag-atlas);}
+.ag-hephaestus{--c:var(--ag-hephaestus);} .ag-cronos{--c:var(--ag-cronos);}
+.ag-iris{--c:var(--ag-iris);} .ag-gaia{--c:var(--ag-gaia);}
+.ag-themis{--c:var(--ag-themis);} .ag-hermes{--c:var(--ag-hermes);}
+.ag-argos{--c:var(--ag-argos);} .ag-zeus{--c:var(--ag-zeus);}
+
+.ag-name { font-weight: 600; font-size: 14px; letter-spacing: 0.01em; }
+
+/* ── status pill ──────────────────────────────────────────── */
+.pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 3px 9px 3px 8px; border-radius: 999px;
+  font-family: var(--mono); font-size: 11.5px; font-weight: 500;
+  letter-spacing: 0.01em; line-height: 1; white-space: nowrap;
+  border: 1px solid var(--line-hard); color: var(--tx-dim);
+  background: var(--surface-2);
+}
+.pill .dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.pill.ok    { color: var(--ok);    border-color: color-mix(in oklch,var(--ok) 35%,transparent);    background: var(--ok-bg); }
+.pill.warn  { color: var(--warn);  border-color: color-mix(in oklch,var(--warn) 35%,transparent);  background: var(--warn-bg); }
+.pill.danger{ color: var(--danger);border-color: color-mix(in oklch,var(--danger) 35%,transparent);background: var(--danger-bg); }
+.pill.accent{ color: var(--accent);border-color: color-mix(in oklch,var(--accent) 35%,transparent);background: var(--accent-bg); }
+.pill.active .dot { box-shadow: 0 0 0 3px color-mix(in oklch, currentColor 22%, transparent); }
+
+/* ── kbd / command hints ──────────────────────────────────── */
+kbd, .kbd {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 19px; height: 19px; padding: 0 5px;
+  font-family: var(--mono); font-size: 11px; font-weight: 500;
+  color: var(--tx-dim);
+  background: var(--raised);
+  border: 1px solid var(--line-hard);
+  border-bottom-width: 2px;
+  border-radius: 5px; line-height: 1;
+}
+.hints { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
+.hint  { display: inline-flex; align-items: center; gap: 7px;
+         font-size: 12.5px; color: var(--tx-faint); }
+.hint b { color: var(--tx-dim); font-weight: 500; }
+
+/* ── command palette pill (top bar) ───────────────────────── */
+.cmdk {
+  display: flex; align-items: center; gap: 10px;
+  height: 36px; padding: 0 10px 0 14px;
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: 9px; color: var(--tx-faint); font-size: 13px;
+  min-width: 280px;
+}
+.cmdk .grow { flex: 1; }
+
+/* ── data rows / tables ───────────────────────────────────── */
+.row {
+  display: grid; align-items: center; gap: 18px;
+  padding: 14px 16px; border-radius: var(--r-sm);
+  border: 1px solid transparent;
+  transition: background .14s, border-color .14s;
+}
+.row:hover { background: var(--surface-2); }
+.row.sel {
+  background: var(--surface-2);
+  border-color: color-mix(in oklch, var(--c, var(--accent)) 32%, var(--line));
+  box-shadow: inset 2px 0 0 var(--c, var(--accent));
+}
+.kv { display: flex; flex-direction: column; gap: 3px; }
+.kv .k { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--tx-faint); }
+.kv .v { font-family: var(--mono); font-size: 13.5px; color: var(--tx); }
+
+/* ── gauge bar ────────────────────────────────────────────── */
+.gauge { height: 7px; border-radius: 999px; background: var(--raised); overflow: hidden; position: relative; }
+.gauge > i { display: block; height: 100%; border-radius: 999px; background: var(--ok); }
+.gauge .thr { position: absolute; top: -3px; bottom: -3px; width: 2px; background: var(--tx-ghost); }
+
+/* ── divider ──────────────────────────────────────────────── */
+.hr { height: 1px; background: var(--line-soft); border: 0; }
+.vr { width: 1px; align-self: stretch; background: var(--line-soft); }
+
+/* ── sidebar nav ──────────────────────────────────────────── */
+.nav-item {
+  display: flex; align-items: center; gap: 11px;
+  padding: 9px 12px; border-radius: 8px;
+  color: var(--tx-dim); font-size: 13.5px; font-weight: 500;
+  cursor: default; transition: background .14s, color .14s;
+}
+.nav-item:hover { background: var(--surface-2); color: var(--tx); }
+.nav-item.active { background: var(--surface-2); color: var(--tx); }
+.nav-item.active .ic { color: var(--accent); }
+.nav-item .ic { width: 16px; height: 16px; color: var(--tx-faint); flex: 0 0 auto; }
+.nav-item .ct { margin-left: auto; font-family: var(--mono); font-size: 11px; color: var(--tx-faint); }
+
+/* glyph icon (simple geometric, drawn via borders) */
+.glyph { width: 15px; height: 15px; display: inline-block; }
+
+/* wordmark */
+.wm { display: flex; align-items: center; gap: 11px; }
+.wm .mark {
+  width: 30px; height: 30px; border-radius: 8px; flex: 0 0 auto;
+  background:
+    linear-gradient(135deg, color-mix(in oklch, var(--accent) 30%, var(--surface)), var(--surface));
+  border: 1px solid var(--line-hard);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--mono); font-weight: 700; color: var(--accent); font-size: 15px;
+}
+.wm .name { font-family: var(--mono); font-weight: 600; font-size: 15px; letter-spacing: 0.04em; }
+.wm .tag {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--tx-faint); border: 1px solid var(--line); border-radius: 5px; padding: 2px 6px;
+}
+
+/* swatch (for system sheet) */
+.swatch { height: 52px; border-radius: 8px; border: 1px solid var(--line); }
+.tok { display: flex; flex-direction: column; gap: 7px; }
+.tok .lab { font-family: var(--mono); font-size: 11px; color: var(--tx-faint); }
+
+/* arc gauge wrapper */
+.arc { position: relative; display: inline-grid; place-items: center; }
+.arc .val { position: absolute; font-family: var(--mono); font-weight: 600; }
+
+/* ── interactive app: view switcher + onboarding ─────────────── */
+@keyframes tw-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes tw-rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+@keyframes tw-enter { from { opacity: 0.5; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+@keyframes tw-pop { from { opacity: 0.4; transform: scale(0.985); } to { opacity: 1; transform: none; } }
+.tw-view { animation: tw-enter .28s ease both; height: 100%; }
+
+.app-bar {
+  position: fixed; top: 0; left: 0; right: 0; height: 46px; z-index: 60;
+  display: flex; align-items: center; gap: 14px; padding: 0 16px;
+  background: color-mix(in oklch, var(--surface) 90%, transparent);
+  backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--line); font-family: var(--sans);
+}
+.seg-group { display: flex; align-items: center; gap: 3px; padding: 3px;
+  background: var(--bg-2); border: 1px solid var(--line); border-radius: 11px; }
+.seg {
+  display: flex; align-items: center; gap: 7px; padding: 6px 14px; border-radius: 8px;
+  cursor: pointer; border: 0; background: transparent; color: var(--tx-dim);
+  font-family: inherit; transition: background .15s, color .15s;
+}
+.seg:hover { background: var(--surface-2); color: var(--tx); }
+.seg.on { background: var(--raised); color: var(--tx); box-shadow: inset 0 0 0 1px var(--line-hard); }
+.seg .lab { font-size: 13px; font-weight: 600; }
+.seg.on .lab { color: var(--accent); }
+.seg .sub { font-family: var(--mono); font-size: 10.5px; color: var(--tx-faint); }
+.seg.help { padding: 6px 12px; border: 1px solid var(--line); border-radius: 9px; }
+.seg.help .lab { font-family: var(--mono); }
+
+.coach {
+  position: fixed; top: 56px; left: 50%; transform: translateX(-50%); z-index: 70;
+  white-space: nowrap; background: var(--accent); color: #06201d;
+  font-size: 12.5px; font-weight: 600; padding: 8px 14px; border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0,0,0,.45); animation: tw-enter .45s ease both;
+}
+.coach::after { content: ''; position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%);
+  border: 6px solid transparent; border-bottom-color: var(--accent); }
+
+.tw-modal {
+  position: fixed; inset: 0; z-index: 80; display: grid; place-items: center;
+  background: rgba(6,7,9,.66); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  padding: 24px; font-family: var(--sans);
+}
+.tw-card {
+  width: min(580px, 94vw); background: var(--surface); border: 1px solid var(--line);
+  border-radius: 16px; box-shadow: 0 28px 80px rgba(0,0,0,.6); overflow: hidden; color: var(--tx);
+  animation: tw-pop .24s ease both;
+}
+.help-row {
+  display: flex; align-items: flex-start; gap: 14px; width: 100%; text-align: left;
+  padding: 14px 16px; border-radius: 11px; border: 1px solid var(--line-soft);
+  background: var(--bg-2); cursor: pointer; transition: border-color .15s, background .15s;
+  font-family: inherit; color: var(--tx);
+}
+.help-row:hover { background: var(--surface-2); border-color: var(--line-hard); }
+.help-row.on { border-color: color-mix(in oklch, var(--accent) 42%, var(--line)); box-shadow: inset 2px 0 0 var(--accent); }
+.help-row .num { font-family: var(--mono); font-size: 12px; color: var(--accent);
+  border: 1px solid var(--line-hard); border-radius: 7px; width: 26px; height: 26px;
+  display: grid; place-items: center; flex: 0 0 auto; }

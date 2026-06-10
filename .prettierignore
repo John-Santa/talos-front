@@ -1,0 +1,7 @@
+node_modules
+dist
+coverage
+package-lock.json
+
+# Design system carried verbatim from the Claude Design handoff — do NOT reformat.
+src/styles/talos-system.css
