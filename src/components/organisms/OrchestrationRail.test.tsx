@@ -12,6 +12,45 @@ const mergeOrder: MergeOrder = {
 
 const gate: Gate = { id: 'HG3', state: 'pending' }
 
+describe('OrchestrationRail — conflictFiles indicator', () => {
+  it('shows conflict file count badge when item.conflictFiles is non-empty', () => {
+    const order: MergeOrder = {
+      ...mergeOrder,
+      items: [
+        {
+          n: 1,
+          agent: 'hermes',
+          jiraKey: 'TAL-15',
+          ahead: 4,
+          ready: false,
+          conflictFiles: ['src/foo.ts', 'src/bar.ts'],
+        },
+      ],
+    }
+    const overlap: Overlap = { collisionRate: 0, pairs: { colliding: 0, total: 2 }, verdict: 'OK' }
+    render(<OrchestrationRail mergeOrder={order} overlap={overlap} gate={gate} />)
+    // Expect a conflict indicator showing the count (2 files)
+    expect(screen.getByText(/2 conflict/i)).toBeInTheDocument()
+  })
+
+  it('does NOT show conflict indicator when conflictFiles is empty', () => {
+    const order: MergeOrder = {
+      ...mergeOrder,
+      items: [{ n: 1, agent: 'hermes', jiraKey: 'TAL-15', ahead: 4, ready: true, conflictFiles: [] }],
+    }
+    const overlap: Overlap = { collisionRate: 0, pairs: { colliding: 0, total: 2 }, verdict: 'OK' }
+    render(<OrchestrationRail mergeOrder={order} overlap={overlap} gate={gate} />)
+    // The "conflict-files" data attribute is only rendered when conflictFiles.length > 0
+    expect(document.querySelector('[data-conflict-files]')).toBeNull()
+  })
+
+  it('does NOT show conflict indicator when conflictFiles is absent', () => {
+    const overlap: Overlap = { collisionRate: 0, pairs: { colliding: 0, total: 2 }, verdict: 'OK' }
+    render(<OrchestrationRail mergeOrder={mergeOrder} overlap={overlap} gate={gate} />)
+    expect(document.querySelector('[data-conflict-files]')).toBeNull()
+  })
+})
+
 describe('OrchestrationRail — overlap verdict tone', () => {
   it('renders verdict OK with the ok pill text visible', () => {
     const overlap: Overlap = { collisionRate: 0, pairs: { colliding: 0, total: 2 }, verdict: 'OK' }

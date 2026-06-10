@@ -7,6 +7,42 @@ import styles from './JudgmentDay.module.css'
 /** Judgment Day: ARGOS, the blind judges, the fix-agent, and the verdict/escalation. */
 export function JudgmentDay({ review }: { review: JudgmentReview }) {
   const conflict = review.verdict === 'conflict'
+
+  if (review.pending) {
+    return (
+      <div className={styles.screen}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 22 }}>
+          <Link to="/orchestration" className="crumb-link" style={{ fontSize: 14, whiteSpace: 'nowrap' }}>
+            Judgment Day
+          </Link>
+          <span className="faint" style={{ fontSize: 14 }}>/</span>
+          <span style={{ fontSize: 14, fontWeight: 600, whiteSpace: 'nowrap' }}>
+            review {review.jiraKey}
+          </span>
+        </div>
+        <div
+          role="status"
+          style={{
+            padding: '20px 24px',
+            borderRadius: 10,
+            background: 'var(--surface-2)',
+            border: '1px solid var(--line-hard)',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 8,
+          }}
+        >
+          <span style={{ font: '600 15px/1 var(--sans)' }}>Integración pendiente</span>
+          <p className="dim" style={{ fontSize: 13, lineHeight: 1.5, margin: 0 }}>
+            El veredicto requiere{' '}
+            <code style={{ fontSize: 12 }}>ch judgment</code> (Jira). Aún no disponible
+            offline — conectate a Jira y reintentá.
+          </p>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className={styles.screen}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 22 }}>

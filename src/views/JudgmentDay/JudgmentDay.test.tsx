@@ -21,4 +21,19 @@ describe('JudgmentDay', () => {
       '/orchestration',
     )
   })
+
+  it('renders pending banner when review.pending is true and does NOT show "Aprobado"', () => {
+    renderApp(
+      <JudgmentDay review={aJudgment({ pending: true, judges: [], escalateTo: undefined })} />,
+      { route: '/judgment/TAL-15' },
+    )
+    expect(screen.getByRole('status')).toBeInTheDocument()
+    expect(screen.queryByText('Aprobado')).not.toBeInTheDocument()
+    expect(screen.queryByText('Jueces en conflicto')).not.toBeInTheDocument()
+  })
+
+  it('does NOT render pending banner when review.pending is absent', () => {
+    renderApp(<JudgmentDay review={aJudgment()} />, { route: '/judgment/TAL-15' })
+    expect(screen.queryByRole('status')).not.toBeInTheDocument()
+  })
 })

@@ -25,6 +25,8 @@ export interface MergeItem {
   jiraKey: string
   ahead: number
   ready: boolean
+  /** Files with merge conflicts predicted by the gateway (PR3+). */
+  conflictFiles?: string[]
 }
 
 export interface MergeOrder {
@@ -44,6 +46,10 @@ export interface Overlap {
   /** Colliding vs total `module:*` pairs in flight. */
   pairs: { colliding: number; total: number }
   verdict: OverlapVerdict
+  /** Files involved in module collisions (PR3+, optional). */
+  fileCollisions?: string[]
+  /** Human-readable advisories about colliding pairs (PR3+, optional). */
+  advisories?: string[]
 }
 
 export type GateId = `HG${0 | 1 | 2 | 3 | 4 | 5 | 6 | 7}`
@@ -89,6 +95,9 @@ export interface JudgmentReview {
   verdict: ReviewVerdict
   /** Set when judges conflict — the authority the decision escalates to. */
   escalateTo?: Figura
+  /** True when the judgment source (ch/Jira) is unavailable. The view MUST NOT
+   *  render a positive verdict when this is set. */
+  pending?: boolean
 }
 
 /** One snapshot of the orchestration screen — the shared dataset for Faithful/Console/Flow. */
