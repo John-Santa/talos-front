@@ -1,5 +1,7 @@
 export { Ag } from './Ag'
 export type { AgProps, AgSize } from './Ag'
+export { Button } from './Button'
+export type { ButtonProps, ButtonVariant } from './Button'
 export { Pill } from './Pill'
 export type { PillProps, PillKind } from './Pill'
 export { Kbd } from './Kbd'
