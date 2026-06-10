@@ -8,6 +8,8 @@ export interface ConfirmDialogProps {
   cancelLabel?: string
   danger?: boolean
   busy?: boolean
+  /** When non-empty, renders a visible error message above the action buttons. */
+  errorMessage?: string
   onConfirm: () => void
   onCancel: () => void
 }
@@ -20,6 +22,7 @@ export function ConfirmDialog({
   cancelLabel = 'Cancelar',
   danger,
   busy,
+  errorMessage,
   onConfirm,
   onCancel,
 }: ConfirmDialogProps) {
@@ -39,6 +42,14 @@ export function ConfirmDialog({
           </h2>
           <div style={{ fontSize: 13.5, lineHeight: 1.55, color: 'var(--tx-dim)' }}>{children}</div>
         </div>
+        {errorMessage ? (
+          <p
+            role="alert"
+            style={{ margin: '0 22px 0', fontSize: 13, color: 'var(--danger)', lineHeight: 1.4 }}
+          >
+            {errorMessage}
+          </p>
+        ) : null}
         <div
           style={{
             display: 'flex',
