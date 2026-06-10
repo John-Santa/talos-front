@@ -1,7 +1,7 @@
 import { Ag, Hint, Kbd, KV, MiniGauge, Pill } from '@/components/atoms'
 import { MergeRow, Panel } from '@/components/molecules'
 import { AGENTS } from '@/domain/agents'
-import { mergeTone } from '@/domain/selectors'
+import { mergeTone, overlapTone } from '@/domain/selectors'
 import type { OrchestrationSnapshot, Worktree } from '@/domain/types'
 import type { CSSWithVars } from '@/lib/style'
 import styles from './OrchestrationFaithful.module.css'
@@ -112,7 +112,7 @@ export function OrchestrationFaithful({ snapshot }: { snapshot: OrchestrationSna
           <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <span style={K_LABEL}>verdict</span>
-              <Pill kind="ok" active>
+              <Pill kind={overlapTone(overlap.verdict)} active>
                 {overlap.verdict}
               </Pill>
             </div>

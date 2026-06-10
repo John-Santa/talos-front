@@ -1,6 +1,6 @@
 import { MiniGauge, Pill } from '@/components/atoms'
 import { MergeRow, Panel } from '@/components/molecules'
-import { mergeTone } from '@/domain/selectors'
+import { mergeTone, overlapTone } from '@/domain/selectors'
 import type { Gate, GateState, MergeOrder, Overlap } from '@/domain/types'
 
 const GATE_KIND: Record<GateState, 'ok' | 'warn' | 'danger'> = {
@@ -58,7 +58,7 @@ export function OrchestrationRail({ mergeOrder, overlap, gate }: OrchestrationRa
       <Panel
         title="Overlap"
         meta={
-          <Pill kind={overlap.verdict === 'OK' ? 'ok' : 'warn'} active>
+          <Pill kind={overlapTone(overlap.verdict)} active>
             {overlap.verdict}
           </Pill>
         }
