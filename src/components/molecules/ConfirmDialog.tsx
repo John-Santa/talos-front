@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react'
+import { useState, type ReactNode } from 'react'
 import { Button } from '@/components/atoms'
 
 export interface ConfirmDialogProps {
@@ -10,6 +10,12 @@ export interface ConfirmDialogProps {
   busy?: boolean
   /** When non-empty, renders a visible error message above the action buttons. */
   errorMessage?: string
+  /**
+   * When provided, the user must type this exact phrase before the confirm button
+   * is enabled. Used for destructive or irreversible actions (e.g. merge). Renders
+   * an input field with a hint showing the required phrase. Paridad TUI view.go:495.
+   */
+  confirmPhrase?: string
   onConfirm: () => void
   onCancel: () => void
 }
@@ -23,9 +29,13 @@ export function ConfirmDialog({
   danger,
   busy,
   errorMessage,
+  confirmPhrase,
   onConfirm,
   onCancel,
 }: ConfirmDialogProps) {
+  const [typed, setTyped] = useState('')
+  const phraseMatches = confirmPhrase === undefined || typed === confirmPhrase
+
   return (
     <div className="tw-modal" onClick={onCancel}>
       <div
@@ -42,6 +52,32 @@ export function ConfirmDialog({
           </h2>
           <div style={{ fontSize: 13.5, lineHeight: 1.55, color: 'var(--tx-dim)' }}>{children}</div>
         </div>
+        {confirmPhrase ? (
+          <div style={{ padding: '0 22px 16px' }}>
+            <p style={{ fontSize: 12.5, color: 'var(--tx-dim)', margin: '0 0 6px' }}>
+              Escribí <b style={{ color: 'var(--tx)', fontFamily: 'var(--mono)' }}>{confirmPhrase}</b> para
+              confirmar
+            </p>
+            <input
+              type="text"
+              value={typed}
+              onChange={(e) => setTyped(e.target.value)}
+              placeholder={confirmPhrase}
+              style={{
+                width: '100%',
+                boxSizing: 'border-box',
+                padding: '7px 10px',
+                fontSize: 13,
+                fontFamily: 'var(--mono)',
+                background: 'var(--bg-alt, #1a1a1a)',
+                color: 'var(--tx)',
+                border: '1px solid var(--line)',
+                borderRadius: 4,
+                outline: 'none',
+              }}
+            />
+          </div>
+        ) : null}
         {errorMessage ? (
           <p
             role="alert"
@@ -62,7 +98,11 @@ export function ConfirmDialog({
           <Button variant="ghost" onClick={onCancel} disabled={busy}>
             {cancelLabel}
           </Button>
-          <Button variant={danger ? 'danger' : 'primary'} onClick={onConfirm} disabled={busy}>
+          <Button
+            variant={danger ? 'danger' : 'primary'}
+            onClick={onConfirm}
+            disabled={busy || !phraseMatches}
+          >
             {busy ? '…' : confirmLabel}
           </Button>
         </div>

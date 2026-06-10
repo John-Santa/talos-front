@@ -117,6 +117,7 @@ export function OrchestrationContainer() {
         <ConfirmDialog
           title={`¿Mergear ${dialog.worktree.jiraKey}?`}
           confirmLabel="Mergear"
+          confirmPhrase={dialog.worktree.jiraKey}
           busy={busy}
           errorMessage={mutationError ?? undefined}
           onConfirm={() => run(() => mutations.mergeWorktree(dialog.worktree.agent, dialog.worktree.jiraKey))}

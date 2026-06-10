@@ -43,3 +43,93 @@ describe('ConfirmDialog', () => {
     expect(screen.queryByRole('alert')).not.toBeInTheDocument()
   })
 })
+
+describe('ConfirmDialog — type-to-confirm (confirmPhrase)', () => {
+  it('confirm button is disabled when confirmPhrase is set and field is empty', () => {
+    render(
+      <ConfirmDialog
+        title="¿Mergear TAL-15?"
+        confirmLabel="Mergear"
+        confirmPhrase="TAL-15"
+        onConfirm={() => {}}
+        onCancel={() => {}}
+      >
+        cuerpo
+      </ConfirmDialog>,
+    )
+    expect(screen.getByRole('button', { name: 'Mergear' })).toBeDisabled()
+  })
+
+  it('confirm button is disabled when typed text does not match confirmPhrase', async () => {
+    render(
+      <ConfirmDialog
+        title="¿Mergear TAL-15?"
+        confirmLabel="Mergear"
+        confirmPhrase="TAL-15"
+        onConfirm={() => {}}
+        onCancel={() => {}}
+      >
+        cuerpo
+      </ConfirmDialog>,
+    )
+    const input = screen.getByRole('textbox')
+    await userEvent.type(input, 'TAL-16')
+    expect(screen.getByRole('button', { name: 'Mergear' })).toBeDisabled()
+  })
+
+  it('confirm button becomes enabled when typed text exactly matches confirmPhrase', async () => {
+    const onConfirm = vi.fn()
+    render(
+      <ConfirmDialog
+        title="¿Mergear TAL-15?"
+        confirmLabel="Mergear"
+        confirmPhrase="TAL-15"
+        onConfirm={onConfirm}
+        onCancel={() => {}}
+      >
+        cuerpo
+      </ConfirmDialog>,
+    )
+    const input = screen.getByRole('textbox')
+    await userEvent.type(input, 'TAL-15')
+    const confirmBtn = screen.getByRole('button', { name: 'Mergear' })
+    expect(confirmBtn).not.toBeDisabled()
+    await userEvent.click(confirmBtn)
+    expect(onConfirm).toHaveBeenCalledTimes(1)
+  })
+
+  it('renders the confirmPhrase hint text in the dialog', () => {
+    render(
+      <ConfirmDialog
+        title="¿Mergear TAL-15?"
+        confirmPhrase="TAL-15"
+        onConfirm={() => {}}
+        onCancel={() => {}}
+      >
+        cuerpo
+      </ConfirmDialog>,
+    )
+    // The phrase to type must be visible to guide the user (appears in the <b> hint)
+    expect(screen.getAllByText('TAL-15').length).toBeGreaterThan(0)
+  })
+
+  it('does not render a type-to-confirm input when confirmPhrase is absent', () => {
+    render(
+      <ConfirmDialog title="¿Teardown?" onConfirm={() => {}} onCancel={() => {}}>
+        cuerpo
+      </ConfirmDialog>,
+    )
+    expect(screen.queryByRole('textbox')).not.toBeInTheDocument()
+  })
+
+  it('confirm button is enabled normally when no confirmPhrase is set', async () => {
+    const onConfirm = vi.fn()
+    render(
+      <ConfirmDialog title="¿Teardown?" confirmLabel="Eliminar" onConfirm={onConfirm} onCancel={() => {}}>
+        cuerpo
+      </ConfirmDialog>,
+    )
+    await userEvent.click(screen.getByRole('button', { name: 'Eliminar' }))
+    expect(onConfirm).toHaveBeenCalledTimes(1)
+  })
+})
