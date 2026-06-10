@@ -1,7 +1,12 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useRepository } from '@/data/RepositoryProvider'
 import type { Agent, Figura } from '@/domain/agents'
-import type { AgentDetailData, JudgmentReview, OrchestrationSnapshot } from '@/domain/types'
+import type {
+  AgentDetailData,
+  JudgmentReview,
+  NewWorktreeInput,
+  OrchestrationSnapshot,
+} from '@/domain/types'
 
 export interface AsyncState<T> {
   data: T | null
@@ -9,12 +14,17 @@ export interface AsyncState<T> {
   error: Error | null
 }
 
+export interface AsyncResource<T> extends AsyncState<T> {
+  refetch: () => void
+}
+
 /**
- * Minimal async-resource hook over the repository. When the HTTP adapter lands,
- * these hook names stay the same but can be re-implemented on TanStack Query.
+ * Minimal async-resource hook over the repository, with a `refetch` so callers
+ * can refresh after a mutation.
  */
-function useAsync<T>(run: () => Promise<T>, deps: unknown[]): AsyncState<T> {
+function useAsync<T>(run: () => Promise<T>, deps: unknown[]): AsyncResource<T> {
   const [state, setState] = useState<AsyncState<T>>({ data: null, loading: true, error: null })
+  const [tick, setTick] = useState(0)
 
   useEffect(() => {
     let alive = true
@@ -32,27 +42,46 @@ function useAsync<T>(run: () => Promise<T>, deps: unknown[]): AsyncState<T> {
       alive = false
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, deps)
+  }, [...deps, tick])
 
-  return state
+  return { ...state, refetch: () => setTick((t) => t + 1) }
 }
 
-export function useOrchestration(): AsyncState<OrchestrationSnapshot> {
+export function useOrchestration(): AsyncResource<OrchestrationSnapshot> {
   const repo = useRepository()
   return useAsync(() => repo.getOrchestration(), [repo])
 }
 
-export function useAgentList(): AsyncState<Agent[]> {
+export function useAgentList(): AsyncResource<Agent[]> {
   const repo = useRepository()
   return useAsync(() => repo.listAgents(), [repo])
 }
 
-export function useAgentDetail(id: Figura): AsyncState<AgentDetailData> {
+export function useAgentDetail(id: Figura): AsyncResource<AgentDetailData> {
   const repo = useRepository()
   return useAsync(() => repo.getAgent(id), [repo, id])
 }
 
-export function useJudgment(jiraKey: string): AsyncState<JudgmentReview> {
+export function useJudgment(jiraKey: string): AsyncResource<JudgmentReview> {
   const repo = useRepository()
   return useAsync(() => repo.getJudgment(jiraKey), [repo, jiraKey])
+}
+
+export interface TalosMutations {
+  createWorktree: (input: NewWorktreeInput) => Promise<void>
+  teardownWorktree: (figura: Figura) => Promise<void>
+  mergeWorktree: (jiraKey: string) => Promise<void>
+}
+
+/** Write actions over the repository (create / teardown / merge worktree). */
+export function useTalosMutations(): TalosMutations {
+  const repo = useRepository()
+  return useMemo(
+    () => ({
+      createWorktree: (input) => repo.createWorktree(input),
+      teardownWorktree: (figura) => repo.teardownWorktree(figura),
+      mergeWorktree: (jiraKey) => repo.mergeWorktree(jiraKey),
+    }),
+    [repo],
+  )
 }

@@ -23,7 +23,7 @@
 
 .content {
   display: grid;
-  grid-template-columns: 1fr 332px;
+  grid-template-columns: 1fr 300px;
   min-height: 0;
 }
 

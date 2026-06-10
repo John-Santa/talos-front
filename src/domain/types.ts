@@ -107,3 +107,9 @@ export interface AgentDetailData {
   dod: DoDItem[]
   activity: ActivityEntry[]
 }
+
+/** Input for creating a new agent worktree. */
+export interface NewWorktreeInput {
+  figura: Figura
+  jiraKey: string
+}

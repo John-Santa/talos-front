@@ -47,4 +47,28 @@ describe('fixtureRepository', () => {
   it('rejects an unknown judgment key', async () => {
     await expect(repo.getJudgment('TAL-999')).rejects.toThrow()
   })
+
+  it('createWorktree adds a worktree and removes the figura from the bench', async () => {
+    const r = createFixtureRepository()
+    await r.createWorktree({ figura: 'atlas', jiraKey: 'TAL-99' })
+    const snap = await r.getOrchestration()
+    expect(snap.worktrees.some((w) => w.agent === 'atlas' && w.jiraKey === 'TAL-99')).toBe(true)
+    expect(snap.idleAgents).not.toContain('atlas')
+    expect(snap.slots.used).toBe(snap.worktrees.length)
+  })
+
+  it('teardownWorktree removes it and frees the figura', async () => {
+    const r = createFixtureRepository()
+    await r.teardownWorktree('hermes')
+    const snap = await r.getOrchestration()
+    expect(snap.worktrees.some((w) => w.agent === 'hermes')).toBe(false)
+    expect(snap.idleAgents).toContain('hermes')
+  })
+
+  it('mergeWorktree removes the merged worktree', async () => {
+    const r = createFixtureRepository()
+    await r.mergeWorktree('TAL-15')
+    const snap = await r.getOrchestration()
+    expect(snap.worktrees.some((w) => w.jiraKey === 'TAL-15')).toBe(false)
+  })
 })

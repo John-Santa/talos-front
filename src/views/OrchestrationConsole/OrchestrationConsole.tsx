@@ -1,14 +1,27 @@
 import { useState } from 'react'
-import { Hint, Kbd, Pill } from '@/components/atoms'
+import { Kbd, Pill } from '@/components/atoms'
 import { Sidebar } from '@/components/organisms/Sidebar'
 import { WorktreeTable } from '@/components/organisms/WorktreeTable'
 import { OrchestrationRail } from '@/components/organisms/OrchestrationRail'
 import { ALL_AGENTS } from '@/domain/agents'
-import type { OrchestrationSnapshot } from '@/domain/types'
+import type { OrchestrationSnapshot, Worktree } from '@/domain/types'
 import styles from './OrchestrationConsole.module.css'
 
+/** Friendly write actions surfaced as buttons in the console. */
+export interface OrchestrationActions {
+  onNew: () => void
+  onMerge: (worktree: Worktree) => void
+  onTeardown: (worktree: Worktree) => void
+}
+
 /** V2 · Consola — the full app shell: sidebar · table · rail · command strip. */
-export function OrchestrationConsole({ snapshot }: { snapshot: OrchestrationSnapshot }) {
+export function OrchestrationConsole({
+  snapshot,
+  actions,
+}: {
+  snapshot: OrchestrationSnapshot
+  actions?: OrchestrationActions
+}) {
   const [navOpen, setNavOpen] = useState(false)
   const closeNav = () => setNavOpen(false)
   return (
@@ -56,6 +69,9 @@ export function OrchestrationConsole({ snapshot }: { snapshot: OrchestrationSnap
               worktrees={snapshot.worktrees}
               idleAgents={snapshot.idleAgents}
               slots={snapshot.slots}
+              onNew={actions?.onNew}
+              onMerge={actions?.onMerge}
+              onTeardown={actions?.onTeardown}
             />
           </div>
           <OrchestrationRail
@@ -66,20 +82,9 @@ export function OrchestrationConsole({ snapshot }: { snapshot: OrchestrationSnap
         </div>
 
         <div className={`hints ${styles.strip}`}>
-          <Hint
-            keys={
-              <>
-                <Kbd>↑</Kbd>
-                <Kbd>↓</Kbd>
-              </>
-            }
-          >
-            move
-          </Hint>
-          <Hint keys={<Kbd>n</Kbd>}>new</Hint>
-          <Hint keys={<Kbd>x</Kbd>}>teardown</Hint>
-          <Hint keys={<Kbd>m</Kbd>}>merge</Hint>
-          <Hint keys={<Kbd>?</Kbd>}>help</Hint>
+          <span className="faint" style={{ fontSize: 12 }}>
+            Usá los botones para crear, mergear o dar de baja worktrees.
+          </span>
           <span style={{ flex: 1 }} />
           <span className="hint mono" style={{ color: 'var(--tx-ghost)' }}>
             tablex.atlassian.net · TAL

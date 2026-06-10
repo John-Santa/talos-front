@@ -1,5 +1,6 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, vi } from 'vitest'
 import { screen, fireEvent } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import { renderApp } from '@/test/render'
 import { OrchestrationConsole } from './OrchestrationConsole'
 import { fixtureOrchestration } from '@/data/fixtures/orchestration'
@@ -23,5 +24,19 @@ describe('OrchestrationConsole', () => {
     expect(aside).toHaveAttribute('data-open', 'false')
     fireEvent.click(screen.getByTestId('nav-toggle'))
     expect(aside).toHaveAttribute('data-open', 'true')
+  })
+
+  it('surfaces friendly action buttons that fire the callbacks', async () => {
+    const user = userEvent.setup()
+    const actions = { onNew: vi.fn(), onMerge: vi.fn(), onTeardown: vi.fn() }
+    renderApp(<OrchestrationConsole snapshot={fixtureOrchestration} actions={actions} />, {
+      route: '/orchestration',
+    })
+    await user.click(screen.getByRole('button', { name: '+ Nuevo worktree' }))
+    expect(actions.onNew).toHaveBeenCalledTimes(1)
+
+    const teardownButtons = screen.getAllByRole('button', { name: 'Teardown' })
+    await user.click(teardownButtons[0]!)
+    expect(actions.onTeardown).toHaveBeenCalledTimes(1)
   })
 })

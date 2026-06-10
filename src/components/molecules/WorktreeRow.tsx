@@ -1,21 +1,25 @@
-import { Ag, Pill } from '@/components/atoms'
+import { Ag, Button, Pill } from '@/components/atoms'
 import { AGENTS } from '@/domain/agents'
 import { statusTone } from '@/domain/selectors'
 import type { Worktree } from '@/domain/types'
 import type { CSSWithVars } from '@/lib/style'
 
-const COLUMNS = '150px 1fr 78px 118px 92px'
+export const WORKTREE_COLUMNS_BASE = '140px 1fr 68px 104px 80px'
+const ACTIONS_COL = '132px'
 
 export interface WorktreeRowProps {
   worktree: Worktree
   selected?: boolean
+  onMerge?: (worktree: Worktree) => void
+  onTeardown?: (worktree: Worktree) => void
 }
 
-/** A worktree table row: figura · branch · head · module · status. */
-export function WorktreeRow({ worktree, selected }: WorktreeRowProps) {
+/** A worktree table row: figura · branch · head · module · status · actions. */
+export function WorktreeRow({ worktree, selected, onMerge, onTeardown }: WorktreeRowProps) {
   const agent = AGENTS[worktree.agent]
+  const hasActions = Boolean(onMerge || onTeardown)
   const style: CSSWithVars = {
-    gridTemplateColumns: COLUMNS,
+    gridTemplateColumns: hasActions ? `${WORKTREE_COLUMNS_BASE} ${ACTIONS_COL}` : WORKTREE_COLUMNS_BASE,
     gap: 16,
     '--c': `var(${agent.hueToken})`,
   }
@@ -37,6 +41,34 @@ export function WorktreeRow({ worktree, selected }: WorktreeRowProps) {
       <Pill kind={statusTone(worktree.status)} active>
         {worktree.status}
       </Pill>
+      {hasActions ? (
+        <span style={{ display: 'flex', gap: 6, justifyContent: 'flex-end' }}>
+          {onMerge ? (
+            <Button
+              size="sm"
+              variant="ghost"
+              onClick={(e) => {
+                e.stopPropagation()
+                onMerge(worktree)
+              }}
+            >
+              Mergear
+            </Button>
+          ) : null}
+          {onTeardown ? (
+            <Button
+              size="sm"
+              variant="danger"
+              onClick={(e) => {
+                e.stopPropagation()
+                onTeardown(worktree)
+              }}
+            >
+              Teardown
+            </Button>
+          ) : null}
+        </span>
+      ) : null}
     </div>
   )
 }
