@@ -17,4 +17,22 @@ describe('NewWorktreeDialog', () => {
     await userEvent.click(create)
     expect(onCreate).toHaveBeenCalledWith({ figura: 'atlas', jiraKey: 'TAL-23' })
   })
+
+  it('renders the error message when errorMessage is provided', () => {
+    render(
+      <NewWorktreeDialog
+        idleAgents={['atlas']}
+        onCreate={() => {}}
+        onCancel={() => {}}
+        errorMessage="TALOS gateway POST /api/worktrees → 400"
+      />,
+    )
+    expect(screen.getByRole('alert')).toBeInTheDocument()
+    expect(screen.getByRole('alert')).toHaveTextContent('TALOS gateway POST /api/worktrees → 400')
+  })
+
+  it('does not render an error element when errorMessage is absent', () => {
+    render(<NewWorktreeDialog idleAgents={['atlas']} onCreate={() => {}} onCancel={() => {}} />)
+    expect(screen.queryByRole('alert')).not.toBeInTheDocument()
+  })
 })

@@ -7,6 +7,8 @@ export interface NewWorktreeDialogProps {
   /** Figuras offered first (idle ones); falls back to the full roster. */
   idleAgents?: Figura[]
   busy?: boolean
+  /** When non-empty, renders a visible error message above the action buttons. */
+  errorMessage?: string
   onCreate: (input: NewWorktreeInput) => void
   onCancel: () => void
 }
@@ -32,7 +34,7 @@ const label: CSSProperties = {
 }
 
 /** Friendly form to spin up an agent worktree (replaces the `n` keyboard command). */
-export function NewWorktreeDialog({ idleAgents, busy, onCreate, onCancel }: NewWorktreeDialogProps) {
+export function NewWorktreeDialog({ idleAgents, busy, errorMessage, onCreate, onCancel }: NewWorktreeDialogProps) {
   const options = idleAgents && idleAgents.length > 0 ? idleAgents : [...FIGURAS]
   const [figura, setFigura] = useState<Figura>(options[0] ?? 'iris')
   const [key, setKey] = useState('')
@@ -98,6 +100,14 @@ export function NewWorktreeDialog({ idleAgents, busy, onCreate, onCancel }: NewW
           </div>
         </div>
 
+        {errorMessage ? (
+          <p
+            role="alert"
+            style={{ margin: '0 22px 0', fontSize: 13, color: 'var(--danger)', lineHeight: 1.4 }}
+          >
+            {errorMessage}
+          </p>
+        ) : null}
         <div
           style={{
             display: 'flex',
