@@ -14,6 +14,7 @@ export const routeObjects: RouteObject[] = [
       { path: 'orchestration', element: <OrchestrationContainer /> },
       { path: 'agents', element: <AgentsList /> },
       { path: 'agents/:figura', element: <AgentDetailContainer /> },
+      { path: 'judgment', element: <Navigate to="/orchestration" replace /> },
       { path: 'judgment/:jiraKey', element: <JudgmentDayContainer /> },
     ],
   },

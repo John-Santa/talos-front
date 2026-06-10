@@ -48,4 +48,9 @@ describe('shell', () => {
     renderShell(['/agents/hermes'])
     expect(await screen.findByRole('heading', { name: 'Hermes' })).toBeInTheDocument()
   })
+
+  it('redirects /judgment to /orchestration', async () => {
+    renderShell(['/judgment'])
+    expect(await screen.findByText('Merge readiness')).toBeInTheDocument()
+  })
 })
