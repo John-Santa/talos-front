@@ -33,11 +33,15 @@ function renderView(view: ViewMode, snapshot: OrchestrationSnapshot, actions: Or
 /** Fetches the snapshot, renders the selected view, and drives the write actions. */
 export function OrchestrationContainer() {
   const { view } = useViewMode()
-  const { data, loading, error, refetch } = useOrchestration()
-  const mutations = useTalosMutations()
   const [dialog, setDialog] = useState<Dialog>(null)
   const [busy, setBusy] = useState(false)
   const [mutationError, setMutationError] = useState<string | null>(null)
+
+  const { data, loading, error, refreshing, refetch } = useOrchestration({
+    pollMs: 10000,
+    paused: dialog !== null || busy,
+  })
+  const mutations = useTalosMutations()
 
   const closeDialog = () => {
     setDialog(null)
@@ -70,8 +74,25 @@ export function OrchestrationContainer() {
     <div
       data-testid="orchestration"
       data-view={view}
-      style={{ flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column' }}
+      data-refreshing={refreshing ? 'true' : undefined}
+      style={{ flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column', position: 'relative' }}
     >
+      {refreshing ? (
+        <span
+          aria-label="Actualizando"
+          style={{
+            position: 'absolute',
+            top: 10,
+            right: 14,
+            width: 7,
+            height: 7,
+            borderRadius: '50%',
+            background: 'var(--accent, oklch(65% 0.18 260))',
+            opacity: 0.7,
+            zIndex: 10,
+          }}
+        />
+      ) : null}
       {loading || !data ? (
         error ? (
           <ErrorState message={error.message} />
