@@ -1,18 +1,19 @@
 import { useParams } from 'react-router-dom'
-import { isFigura } from '@/domain/agents'
-import { Eyebrow } from '@/components/atoms'
+import { isFigura, type Figura } from '@/domain/agents'
+import { useAgentDetail } from '@/hooks/useTalosData'
+import { ErrorState, Loading } from '@/components/Feedback'
+import { AgentDetail } from '@/views/AgentDetail/AgentDetail'
 
-/** Placeholder for PR4 — PR8 fills in the hero, worktree, DoD and timeline. */
+function AgentDetailLoader({ id }: { id: Figura }) {
+  const { data, loading, error } = useAgentDetail(id)
+  if (loading || !data) return error ? <ErrorState message={error.message} /> : <Loading />
+  return <AgentDetail detail={data} />
+}
+
 export function AgentDetailContainer() {
   const { figura } = useParams()
-  const name = figura && isFigura(figura) ? figura.toUpperCase() : 'desconocido'
-  return (
-    <div style={{ flex: 1, padding: 24 }}>
-      <Eyebrow>Agents /</Eyebrow>
-      <h1 style={{ font: '600 24px/1.1 var(--sans)', margin: '8px 0 0' }}>{name}</h1>
-      <p className="faint" style={{ fontSize: 12, marginTop: 8 }}>
-        vista en construcción
-      </p>
-    </div>
-  )
+  if (!figura || !isFigura(figura)) {
+    return <ErrorState message={`Figura desconocida: ${figura ?? '—'}`} />
+  }
+  return <AgentDetailLoader id={figura} />
 }

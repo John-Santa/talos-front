@@ -1,0 +1,27 @@
+.screen {
+  display: flex;
+  flex-direction: column;
+  padding: 28px 36px;
+  height: 100%;
+  min-height: 0;
+  overflow: auto;
+}
+
+.cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+  margin-top: 26px;
+}
+
+.kvGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+@media (max-width: 820px) {
+  .cols {
+    grid-template-columns: 1fr;
+  }
+}

@@ -44,8 +44,8 @@ describe('shell', () => {
     await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull())
   })
 
-  it('routes to an agent detail', () => {
+  it('routes to an agent detail', async () => {
     renderShell(['/agents/hermes'])
-    expect(screen.getByRole('heading', { name: 'HERMES' })).toBeInTheDocument()
+    expect(await screen.findByRole('heading', { name: 'Hermes' })).toBeInTheDocument()
   })
 })
