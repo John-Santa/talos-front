@@ -65,10 +65,13 @@ describe('fixtureRepository', () => {
     expect(snap.idleAgents).toContain('hermes')
   })
 
-  it('mergeWorktree removes the merged worktree', async () => {
+  it('mergeWorktree removes the matched worktree (figura + jiraKey)', async () => {
     const r = createFixtureRepository()
-    await r.mergeWorktree('TAL-15')
+    await r.mergeWorktree('hermes', 'TAL-15')
     const snap = await r.getOrchestration()
-    expect(snap.worktrees.some((w) => w.jiraKey === 'TAL-15')).toBe(false)
+    expect(snap.worktrees.some((w) => w.agent === 'hermes' && w.jiraKey === 'TAL-15')).toBe(false)
+    // A different figura with the same jiraKey would NOT be removed (no fixture for this,
+    // but we assert the positive case is clean).
+    expect(snap.idleAgents).toContain('hermes')
   })
 })

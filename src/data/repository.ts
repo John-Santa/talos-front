@@ -19,5 +19,5 @@ export interface TalosRepository {
 
   createWorktree(input: NewWorktreeInput): Promise<void>
   teardownWorktree(figura: Figura): Promise<void>
-  mergeWorktree(jiraKey: string): Promise<void>
+  mergeWorktree(figura: Figura, jiraKey: string): Promise<void>
 }

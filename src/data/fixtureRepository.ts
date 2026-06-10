@@ -81,10 +81,15 @@ export function createFixtureRepository(): TalosRepository {
       return Promise.resolve()
     },
 
-    mergeWorktree(jiraKey: string): Promise<void> {
-      const merged = snapshot.worktrees.find((w) => w.jiraKey === jiraKey)
-      snapshot.worktrees = snapshot.worktrees.filter((w) => w.jiraKey !== jiraKey)
-      snapshot.mergeOrder.items = snapshot.mergeOrder.items.filter((i) => i.jiraKey !== jiraKey)
+    mergeWorktree(figura: Figura, jiraKey: string): Promise<void> {
+      // Use both figura and jiraKey for exact match (mirrors gateway exact-branch logic).
+      const merged = snapshot.worktrees.find((w) => w.agent === figura && w.jiraKey === jiraKey)
+      snapshot.worktrees = snapshot.worktrees.filter(
+        (w) => !(w.agent === figura && w.jiraKey === jiraKey),
+      )
+      snapshot.mergeOrder.items = snapshot.mergeOrder.items.filter(
+        (i) => !(i.agent === figura && i.jiraKey === jiraKey),
+      )
       if (merged && !snapshot.idleAgents.includes(merged.agent)) {
         snapshot.idleAgents.push(merged.agent)
       }

@@ -53,6 +53,30 @@ describe('OrchestrationContainer — mutation error path', () => {
     expect(refetchSpy).toHaveBeenCalledTimes(1)
   })
 
+  it('calls mergeWorktree with both figura and jiraKey', async () => {
+    const repo = createFixtureRepository()
+    repo.mergeWorktree = vi.fn().mockResolvedValue(undefined)
+
+    renderContainer(repo)
+
+    const mergeBtns = await screen.findAllByRole('button', { name: 'Mergear' })
+    await userEvent.click(mergeBtns[0]!)
+
+    const dialog = await screen.findByRole('dialog')
+    const confirmBtn = within(dialog).getByRole('button', { name: 'Mergear' })
+    await userEvent.click(confirmBtn)
+
+    await waitFor(() => {
+      expect(repo.mergeWorktree).toHaveBeenCalledWith(
+        expect.any(String), // figura
+        expect.any(String), // jiraKey
+      )
+    })
+    // Must be called with 2 arguments, not just jiraKey
+    const calls = (repo.mergeWorktree as ReturnType<typeof vi.fn>).mock.calls
+    expect(calls[0]).toHaveLength(2)
+  })
+
   it('clears error and closes dialog when mutation succeeds after a prior failure', async () => {
     const repo = createFixtureRepository()
     // First call rejects, second call resolves

@@ -47,6 +47,7 @@ export function createHttpRepository(baseUrl: string): TalosRepository {
 
     createWorktree: (input: NewWorktreeInput) => send('POST', '/api/worktrees', input),
     teardownWorktree: (figura: Figura) => send('DELETE', `/api/worktrees/${figura}`),
-    mergeWorktree: (jiraKey: string) => send('POST', `/api/merge/${encodeURIComponent(jiraKey)}`),
+    mergeWorktree: (figura: Figura, jiraKey: string) =>
+      send('POST', `/api/merge/${encodeURIComponent(jiraKey)}`, { figura }),
   }
 }

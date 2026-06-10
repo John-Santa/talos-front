@@ -70,7 +70,7 @@ export function useJudgment(jiraKey: string): AsyncResource<JudgmentReview> {
 export interface TalosMutations {
   createWorktree: (input: NewWorktreeInput) => Promise<void>
   teardownWorktree: (figura: Figura) => Promise<void>
-  mergeWorktree: (jiraKey: string) => Promise<void>
+  mergeWorktree: (figura: Figura, jiraKey: string) => Promise<void>
 }
 
 /** Write actions over the repository (create / teardown / merge worktree). */
@@ -80,7 +80,7 @@ export function useTalosMutations(): TalosMutations {
     () => ({
       createWorktree: (input) => repo.createWorktree(input),
       teardownWorktree: (figura) => repo.teardownWorktree(figura),
-      mergeWorktree: (jiraKey) => repo.mergeWorktree(jiraKey),
+      mergeWorktree: (figura, jiraKey) => repo.mergeWorktree(figura, jiraKey),
     }),
     [repo],
   )

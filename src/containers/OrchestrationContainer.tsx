@@ -98,7 +98,7 @@ export function OrchestrationContainer() {
           confirmLabel="Mergear"
           busy={busy}
           errorMessage={mutationError ?? undefined}
-          onConfirm={() => run(() => mutations.mergeWorktree(dialog.worktree.jiraKey))}
+          onConfirm={() => run(() => mutations.mergeWorktree(dialog.worktree.agent, dialog.worktree.jiraKey))}
           onCancel={closeDialog}
         >
           Vas a mergear <b style={{ color: 'var(--tx)' }}>{dialog.worktree.branch}</b> a{' '}
