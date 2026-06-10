@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { Ag } from '@/components/atoms'
 import { AGENTS } from '@/domain/agents'
 import type { MergeItem } from '@/domain/types'
@@ -14,9 +15,13 @@ export function MergeRow({ item }: { item: MergeItem }) {
       <span className="ag-name" style={{ fontSize: 13.5 }}>
         {AGENTS[item.agent].name}
       </span>
-      <span className="mono dim" style={{ fontSize: 12.5 }}>
+      <Link
+        to={`/judgment/${item.jiraKey}`}
+        className="mono dim"
+        style={{ fontSize: 12.5, color: 'inherit', textDecoration: 'none' }}
+      >
         {item.jiraKey}
-      </span>
+      </Link>
       <span style={{ flex: 1 }} />
       {hasConflicts && (
         <span

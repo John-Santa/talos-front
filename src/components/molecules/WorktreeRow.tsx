@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { Ag, Button, Pill } from '@/components/atoms'
 import { AGENTS } from '@/domain/agents'
 import { statusTone } from '@/domain/selectors'
@@ -25,12 +26,23 @@ export function WorktreeRow({ worktree, selected, onMerge, onTeardown }: Worktre
   }
   return (
     <div className={`row${selected ? ' sel' : ''}`} style={style}>
-      <span style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+      <Link
+        to={`/agents/${worktree.agent}`}
+        style={{ display: 'flex', alignItems: 'center', gap: 10, color: 'inherit', textDecoration: 'none' }}
+        onClick={(e) => e.stopPropagation()}
+      >
         <Ag name={worktree.agent} />
         <span className="ag-name">{agent.name}</span>
-      </span>
+      </Link>
       <span className="mono" style={{ fontSize: 12.5, color: 'var(--tx-dim)', whiteSpace: 'nowrap' }}>
-        agent/{worktree.agent}/<span style={{ color: 'var(--tx)' }}>{worktree.jiraKey}</span>
+        agent/{worktree.agent}/
+        <Link
+          to={`/judgment/${worktree.jiraKey}`}
+          style={{ color: 'var(--tx)', textDecoration: 'none' }}
+          onClick={(e) => e.stopPropagation()}
+        >
+          {worktree.jiraKey}
+        </Link>
       </span>
       <span className="mono faint" style={{ fontSize: 12.5 }}>
         {worktree.head}
