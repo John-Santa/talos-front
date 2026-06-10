@@ -14,3 +14,13 @@ body {
   outline: 2px solid var(--accent, #66d9d0);
   outline-offset: 2px;
 }
+
+/* Clickable breadcrumb crumb (back navigation). */
+.crumb-link {
+  color: var(--tx-faint);
+  text-decoration: none;
+  transition: color 0.14s;
+}
+.crumb-link:hover {
+  color: var(--tx-dim);
+}

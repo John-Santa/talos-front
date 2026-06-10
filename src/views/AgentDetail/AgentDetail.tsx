@@ -1,4 +1,5 @@
 import { Fragment } from 'react'
+import { Link } from 'react-router-dom'
 import { Ag, KV, Pill } from '@/components/atoms'
 import { DoDRow, Panel, TimelineItem } from '@/components/molecules'
 import type { AgentDetailData } from '@/domain/types'
@@ -11,9 +12,12 @@ export function AgentDetail({ detail }: { detail: AgentDetailData }) {
 
   return (
     <div className={styles.screen}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 22 }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 22 }}>
+        <Link to="/agents" className="crumb-link" style={{ fontSize: 14 }}>
+          Agents
+        </Link>
         <span className="faint" style={{ fontSize: 14 }}>
-          Agents /
+          /
         </span>
         <span style={{ fontSize: 14, fontWeight: 600 }}>{agent.name.toUpperCase()}</span>
         <span style={{ flex: 1 }} />

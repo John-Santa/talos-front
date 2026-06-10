@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { Ag, Pill, Vr } from '@/components/atoms'
 import { JudgeCard } from '@/components/molecules'
 import type { JudgmentReview } from '@/domain/types'
@@ -8,9 +9,12 @@ export function JudgmentDay({ review }: { review: JudgmentReview }) {
   const conflict = review.verdict === 'conflict'
   return (
     <div className={styles.screen}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 22 }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 22 }}>
+        <Link to="/orchestration" className="crumb-link" style={{ fontSize: 14, whiteSpace: 'nowrap' }}>
+          Judgment Day
+        </Link>
         <span className="faint" style={{ fontSize: 14 }}>
-          Judgment Day /
+          /
         </span>
         <span style={{ fontSize: 14, fontWeight: 600, whiteSpace: 'nowrap' }}>
           review {review.jiraKey}

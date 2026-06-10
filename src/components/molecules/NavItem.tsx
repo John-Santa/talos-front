@@ -8,10 +8,12 @@ export interface NavItemProps {
   active?: boolean
   /** When set, the item navigates; otherwise it renders inert (placeholder section). */
   to?: string
+  /** Fired on navigation (used to close the mobile drawer). */
+  onClick?: () => void
 }
 
 /** Sidebar navigation entry. */
-export function NavItem({ icon, label, count, active, to }: NavItemProps) {
+export function NavItem({ icon, label, count, active, to, onClick }: NavItemProps) {
   const body = (
     <>
       <Icon k={icon} className="ic" />
@@ -22,7 +24,7 @@ export function NavItem({ icon, label, count, active, to }: NavItemProps) {
   const className = `nav-item${active ? ' active' : ''}`
   if (to) {
     return (
-      <Link to={to} className={className} aria-current={active ? 'page' : undefined}>
+      <Link to={to} className={className} aria-current={active ? 'page' : undefined} onClick={onClick}>
         {body}
       </Link>
     )

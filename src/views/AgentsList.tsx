@@ -6,6 +6,13 @@ import { Ag, Eyebrow } from '@/components/atoms'
 export function AgentsList() {
   return (
     <div style={{ flex: 1, padding: 24, overflow: 'auto' }}>
+      <Link
+        to="/orchestration"
+        className="crumb-link"
+        style={{ fontSize: 13, display: 'inline-block', marginBottom: 10 }}
+      >
+        ← Orchestration
+      </Link>
       <Eyebrow style={{ marginBottom: 16 }}>Agents · {ALL_AGENTS.length}</Eyebrow>
       <div
         style={{

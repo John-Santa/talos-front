@@ -7,15 +7,27 @@ export interface SidebarProps {
   agentCount: number
   gate: string
   className?: string
+  /** Drawer open state (mobile) — reflected as data-open for styling/tests. */
+  open?: boolean
+  /** Fired when a nav link is followed (closes the mobile drawer). */
+  onNavigate?: () => void
 }
 
 /** The Console left navigation + ZEUS authority footer. */
-export function Sidebar({ worktreeCount, agentCount, gate, className }: SidebarProps) {
+export function Sidebar({
+  worktreeCount,
+  agentCount,
+  gate,
+  className,
+  open,
+  onNavigate,
+}: SidebarProps) {
   const { pathname } = useLocation()
   const active = (prefix: string) => pathname === prefix || pathname.startsWith(`${prefix}/`)
   return (
     <aside
       className={className}
+      data-open={open ? 'true' : 'false'}
       style={{
         borderRight: '1px solid var(--line)',
         background: 'var(--bg-2)',
@@ -33,14 +45,23 @@ export function Sidebar({ worktreeCount, agentCount, gate, className }: SidebarP
           count={worktreeCount}
           to="/orchestration"
           active={active('/orchestration')}
+          onClick={onNavigate}
         />
-        <NavItem icon="agents" label="Agents" count={agentCount} to="/agents" active={active('/agents')} />
+        <NavItem
+          icon="agents"
+          label="Agents"
+          count={agentCount}
+          to="/agents"
+          active={active('/agents')}
+          onClick={onNavigate}
+        />
         <NavItem icon="sdd" label="SDD Flow" />
         <NavItem
           icon="judgment"
           label="Judgment Day"
           to="/judgment/TAL-15"
           active={active('/judgment')}
+          onClick={onNavigate}
         />
         <NavItem icon="gates" label="Gates" count={gate} />
       </nav>
