@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { mergeTone, gaugeWidth, statusTone } from './selectors'
+import { mergeTone, gaugeWidth, statusTone, overlapTone } from './selectors'
 
 describe('mergeTone', () => {
   it('is ok well below the threshold', () => {
@@ -30,5 +30,17 @@ describe('statusTone', () => {
     expect(statusTone('merging')).toBe('accent')
     expect(statusTone('in-review')).toBe('warn')
     expect(statusTone('idle')).toBeUndefined()
+  })
+})
+
+describe('overlapTone', () => {
+  it('maps OK to ok', () => {
+    expect(overlapTone('OK')).toBe('ok')
+  })
+  it('maps WARN to warn', () => {
+    expect(overlapTone('WARN')).toBe('warn')
+  })
+  it('maps CONFLICT to danger', () => {
+    expect(overlapTone('CONFLICT')).toBe('danger')
   })
 })
