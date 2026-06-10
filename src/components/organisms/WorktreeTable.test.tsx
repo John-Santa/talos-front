@@ -1,5 +1,6 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import { WorktreeTable } from './WorktreeTable'
 import { fixtureOrchestration } from '@/data/fixtures/orchestration'
 
@@ -13,5 +14,27 @@ describe('WorktreeTable', () => {
     expect(screen.getByText('2 / 7 slots')).toBeInTheDocument()
     expect(screen.getByText(/5 figuras sin worktree/)).toBeInTheDocument()
     expect(screen.getAllByText('active')).toHaveLength(2)
+  })
+
+  it('shows empty state message when worktrees is empty', () => {
+    render(<WorktreeTable worktrees={[]} idleAgents={[]} slots={{ used: 0, total: 7 }} />)
+    expect(screen.getByText('No hay worktrees activos')).toBeInTheDocument()
+  })
+
+  it('empty state CTA calls onNew when clicked', async () => {
+    const onNew = vi.fn()
+    render(
+      <WorktreeTable worktrees={[]} idleAgents={[]} slots={{ used: 0, total: 7 }} onNew={onNew} />,
+    )
+    // Both the header and the empty-state panel render a CTA; click the first one
+    const ctaBtns = screen.getAllByRole('button', { name: /nuevo worktree/i })
+    expect(ctaBtns.length).toBeGreaterThanOrEqual(1)
+    await userEvent.click(ctaBtns[0])
+    expect(onNew).toHaveBeenCalledTimes(1)
+  })
+
+  it('does not show empty state when worktrees is non-empty', () => {
+    render(<WorktreeTable worktrees={worktrees} idleAgents={idleAgents} slots={slots} />)
+    expect(screen.queryByText('No hay worktrees activos')).not.toBeInTheDocument()
   })
 })

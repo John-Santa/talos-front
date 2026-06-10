@@ -65,17 +65,39 @@ export function WorktreeTable({
         {hasActions ? <span /> : null}
       </div>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-        {worktrees.map((w, i) => (
-          <WorktreeRow
-            key={w.branch}
-            worktree={w}
-            selected={i === selectedIndex}
-            onMerge={onMerge}
-            onTeardown={onTeardown}
-          />
-        ))}
-      </div>
+      {worktrees.length === 0 ? (
+        <div
+          style={{
+            padding: 24,
+            border: '1px dashed var(--line-hard)',
+            borderRadius: 'var(--r-sm)',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: 14,
+            color: 'var(--tx-faint)',
+          }}
+        >
+          <span style={{ fontSize: 14 }}>No hay worktrees activos</span>
+          {onNew ? (
+            <Button variant="primary" size="sm" onClick={onNew}>
+              + Nuevo worktree
+            </Button>
+          ) : null}
+        </div>
+      ) : (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+          {worktrees.map((w, i) => (
+            <WorktreeRow
+              key={w.branch}
+              worktree={w}
+              selected={i === selectedIndex}
+              onMerge={onMerge}
+              onTeardown={onTeardown}
+            />
+          ))}
+        </div>
+      )}
 
       {idleAgents.length > 0 ? (
         <div
