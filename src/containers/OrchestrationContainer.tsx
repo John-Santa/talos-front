@@ -3,6 +3,7 @@ import { VIEW_MODES, type ViewMode } from '@/app/viewModes'
 import { useOrchestration } from '@/hooks/useTalosData'
 import { ErrorState, Loading } from '@/components/Feedback'
 import { OrchestrationConsole } from '@/views/OrchestrationConsole/OrchestrationConsole'
+import { OrchestrationFaithful } from '@/views/OrchestrationFaithful/OrchestrationFaithful'
 import type { OrchestrationSnapshot } from '@/domain/types'
 
 /** Placeholder for the views still being built (Fiel/Flow — PR6/PR7). */
@@ -27,6 +28,8 @@ function renderView(view: ViewMode, snapshot: OrchestrationSnapshot) {
   switch (view) {
     case 'console':
       return <OrchestrationConsole snapshot={snapshot} />
+    case 'faithful':
+      return <OrchestrationFaithful snapshot={snapshot} />
     default:
       return <ViewPlaceholder view={view} />
   }
