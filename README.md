@@ -17,7 +17,9 @@ density, monospace) and adds web hierarchy, per-agent identity color, and direct
 ## Scripts
 
 ```bash
-npm run dev         # Vite dev server
+npm run dev         # Vite dev server (fixtures by default)
+npm run dev:all     # front + gateway together, one command (front talks to the live API)
+npm run dev:api     # the Go gateway only (talos/platform/webapi, `go run` — no binaries, just git)
 npm test            # vitest (watch)
 npm run test:run    # vitest run (CI / one-shot)
 npm run coverage    # vitest run --coverage
