@@ -21,14 +21,16 @@ function renderShell(initialEntries: string[] = ['/orchestration']) {
 describe('shell', () => {
   beforeEach(() => localStorage.clear())
 
-  it('renders the wordmark and defaults to the console view', () => {
+  it('renders the wordmark and defaults to the console view', async () => {
     renderShell()
     expect(screen.getByText('TALOS')).toBeInTheDocument()
     expect(screen.getByTestId('orchestration')).toHaveAttribute('data-view', 'console')
+    expect(await screen.findByText('Merge readiness')).toBeInTheDocument()
   })
 
   it('switches the view with 1·2·3 and persists the choice', async () => {
     renderShell()
+    await screen.findByText('Merge readiness') // wait for the console to load
     await userEvent.keyboard('1')
     expect(screen.getByTestId('orchestration')).toHaveAttribute('data-view', 'faithful')
     expect(localStorage.getItem('talos.view')).toBe('faithful')

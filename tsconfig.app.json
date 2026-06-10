@@ -20,11 +20,13 @@
       "@/*": ["./src/*"]
     },
 
-    /* Strict — mandated by project conventions */
+    /* Strict — mandated by project conventions.
+       exactOptionalPropertyTypes is intentionally OFF: combined with
+       noUncheckedIndexedAccess it makes CSS-module class access (string|undefined)
+       fight every optional `className`/prop, which is not worth the friction. */
     "strict": true,
     "noUncheckedIndexedAccess": true,
     "noImplicitOverride": true,
-    "exactOptionalPropertyTypes": true,
 
     /* Linting */
     "noUnusedLocals": true,
