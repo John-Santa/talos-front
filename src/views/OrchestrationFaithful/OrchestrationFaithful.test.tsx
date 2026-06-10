@@ -1,12 +1,17 @@
 import { describe, it, expect } from 'vitest'
 import { render, screen } from '@testing-library/react'
+import { MemoryRouter } from 'react-router-dom'
 import { OrchestrationFaithful } from './OrchestrationFaithful'
 import { fixtureOrchestration } from '@/data/fixtures/orchestration'
 import type { OrchestrationSnapshot } from '@/domain/types'
 
 describe('OrchestrationFaithful', () => {
   it('renders the three panels and the selected worktree', () => {
-    render(<OrchestrationFaithful snapshot={fixtureOrchestration} />)
+    render(
+      <MemoryRouter>
+        <OrchestrationFaithful snapshot={fixtureOrchestration} />
+      </MemoryRouter>,
+    )
     expect(screen.getByText('Worktrees')).toBeInTheDocument()
     expect(screen.getByText('Merge Order')).toBeInTheDocument()
     expect(screen.getByText('Overlap')).toBeInTheDocument()
@@ -20,7 +25,11 @@ describe('OrchestrationFaithful', () => {
       ...fixtureOrchestration,
       overlap: { collisionRate: 25, pairs: { colliding: 2, total: 8 }, verdict: 'CONFLICT' },
     }
-    render(<OrchestrationFaithful snapshot={snapshot} />)
+    render(
+      <MemoryRouter>
+        <OrchestrationFaithful snapshot={snapshot} />
+      </MemoryRouter>,
+    )
     const conflictPill = screen.getByText('CONFLICT').closest('.pill')
     expect(conflictPill).not.toBeNull()
     expect(conflictPill).toHaveClass('danger')

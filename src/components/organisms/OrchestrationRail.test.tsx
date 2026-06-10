@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { render, screen } from '@testing-library/react'
+import { MemoryRouter } from 'react-router-dom'
 import { OrchestrationRail } from './OrchestrationRail'
 import type { Gate, MergeOrder, Overlap } from '@/domain/types'
 
@@ -28,7 +29,7 @@ describe('OrchestrationRail — conflictFiles indicator', () => {
       ],
     }
     const overlap: Overlap = { collisionRate: 0, pairs: { colliding: 0, total: 2 }, verdict: 'OK' }
-    render(<OrchestrationRail mergeOrder={order} overlap={overlap} gate={gate} />)
+    render(<MemoryRouter><OrchestrationRail mergeOrder={order} overlap={overlap} gate={gate} /></MemoryRouter>)
     // Expect a conflict indicator showing the count (2 files)
     expect(screen.getByText(/2 conflict/i)).toBeInTheDocument()
   })
@@ -39,14 +40,14 @@ describe('OrchestrationRail — conflictFiles indicator', () => {
       items: [{ n: 1, agent: 'hermes', jiraKey: 'TAL-15', ahead: 4, ready: true, conflictFiles: [] }],
     }
     const overlap: Overlap = { collisionRate: 0, pairs: { colliding: 0, total: 2 }, verdict: 'OK' }
-    render(<OrchestrationRail mergeOrder={order} overlap={overlap} gate={gate} />)
+    render(<MemoryRouter><OrchestrationRail mergeOrder={order} overlap={overlap} gate={gate} /></MemoryRouter>)
     // The "conflict-files" data attribute is only rendered when conflictFiles.length > 0
     expect(document.querySelector('[data-conflict-files]')).toBeNull()
   })
 
   it('does NOT show conflict indicator when conflictFiles is absent', () => {
     const overlap: Overlap = { collisionRate: 0, pairs: { colliding: 0, total: 2 }, verdict: 'OK' }
-    render(<OrchestrationRail mergeOrder={mergeOrder} overlap={overlap} gate={gate} />)
+    render(<MemoryRouter><OrchestrationRail mergeOrder={mergeOrder} overlap={overlap} gate={gate} /></MemoryRouter>)
     expect(document.querySelector('[data-conflict-files]')).toBeNull()
   })
 })
@@ -54,14 +55,14 @@ describe('OrchestrationRail — conflictFiles indicator', () => {
 describe('OrchestrationRail — overlap verdict tone', () => {
   it('renders verdict OK with the ok pill text visible', () => {
     const overlap: Overlap = { collisionRate: 0, pairs: { colliding: 0, total: 2 }, verdict: 'OK' }
-    render(<OrchestrationRail mergeOrder={mergeOrder} overlap={overlap} gate={gate} />)
+    render(<MemoryRouter><OrchestrationRail mergeOrder={mergeOrder} overlap={overlap} gate={gate} /></MemoryRouter>)
     // The overlap panel shows the verdict text
     expect(screen.getByText('OK')).toBeInTheDocument()
   })
 
   it('renders verdict CONFLICT — the overlap pill contains CONFLICT text', () => {
     const overlap: Overlap = { collisionRate: 30, pairs: { colliding: 3, total: 10 }, verdict: 'CONFLICT' }
-    render(<OrchestrationRail mergeOrder={mergeOrder} overlap={overlap} gate={gate} />)
+    render(<MemoryRouter><OrchestrationRail mergeOrder={mergeOrder} overlap={overlap} gate={gate} /></MemoryRouter>)
     expect(screen.getByText('CONFLICT')).toBeInTheDocument()
     // The pill wrapping CONFLICT must have class "danger" (mapped from overlapTone)
     // "warn" class must NOT be present — that would be the old broken behavior
@@ -73,7 +74,7 @@ describe('OrchestrationRail — overlap verdict tone', () => {
 
   it('renders verdict WARN with warn class', () => {
     const overlap: Overlap = { collisionRate: 10, pairs: { colliding: 1, total: 5 }, verdict: 'WARN' }
-    render(<OrchestrationRail mergeOrder={mergeOrder} overlap={overlap} gate={gate} />)
+    render(<MemoryRouter><OrchestrationRail mergeOrder={mergeOrder} overlap={overlap} gate={gate} /></MemoryRouter>)
     const warnPill = screen.getByText('WARN').closest('.pill')
     expect(warnPill).not.toBeNull()
     expect(warnPill).toHaveClass('warn')

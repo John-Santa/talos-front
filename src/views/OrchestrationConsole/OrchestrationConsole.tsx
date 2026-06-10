@@ -30,7 +30,6 @@ export function OrchestrationConsole({
         className={`${styles.sidebar}${navOpen ? ` ${styles.sidebarOpen}` : ''}`}
         worktreeCount={snapshot.worktrees.length}
         agentCount={ALL_AGENTS.length}
-        gate={snapshot.gate.id}
         open={navOpen}
         onNavigate={closeNav}
       />

@@ -5,7 +5,6 @@ import { NavItem } from '@/components/molecules'
 export interface SidebarProps {
   worktreeCount: number
   agentCount: number
-  gate: string
   className?: string
   /** Drawer open state (mobile) — reflected as data-open for styling/tests. */
   open?: boolean
@@ -17,7 +16,6 @@ export interface SidebarProps {
 export function Sidebar({
   worktreeCount,
   agentCount,
-  gate,
   className,
   open,
   onNavigate,
@@ -55,15 +53,13 @@ export function Sidebar({
           active={active('/agents')}
           onClick={onNavigate}
         />
-        <NavItem icon="sdd" label="SDD Flow" />
         <NavItem
           icon="judgment"
           label="Judgment Day"
-          to="/judgment/TAL-15"
+          to="/judgment"
           active={active('/judgment')}
           onClick={onNavigate}
         />
-        <NavItem icon="gates" label="Gates" count={gate} />
       </nav>
       <div style={{ flex: 1 }} />
       <Eyebrow style={{ padding: '0 8px 10px' }}>Authority</Eyebrow>
