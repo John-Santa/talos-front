@@ -29,7 +29,7 @@ describe('WorktreeTable', () => {
     // Both the header and the empty-state panel render a CTA; click the first one
     const ctaBtns = screen.getAllByRole('button', { name: /nuevo worktree/i })
     expect(ctaBtns.length).toBeGreaterThanOrEqual(1)
-    await userEvent.click(ctaBtns[0])
+    await userEvent.click(ctaBtns[0]!)
     expect(onNew).toHaveBeenCalledTimes(1)
   })
 

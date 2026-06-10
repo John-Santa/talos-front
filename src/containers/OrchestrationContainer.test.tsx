@@ -31,8 +31,9 @@ describe('OrchestrationContainer — mutation error path', () => {
 
     // Wait for data to load — fixture has a "Mergear" button per worktree row
     const mergeBtns = await screen.findAllByRole('button', { name: 'Mergear' })
+    expect(mergeBtns.length).toBeGreaterThanOrEqual(1)
     // Click the first row's merge button to open the dialog
-    await userEvent.click(mergeBtns[0])
+    await userEvent.click(mergeBtns[0]!)
 
     // Dialog is now open — interact within it
     const dialog = await screen.findByRole('dialog')
@@ -63,7 +64,8 @@ describe('OrchestrationContainer — mutation error path', () => {
     renderContainer(repo)
 
     const mergeBtns = await screen.findAllByRole('button', { name: 'Mergear' })
-    await userEvent.click(mergeBtns[0])
+    expect(mergeBtns.length).toBeGreaterThanOrEqual(1)
+    await userEvent.click(mergeBtns[0]!)
 
     // First attempt — fails — interact within dialog
     const dialog = await screen.findByRole('dialog')
